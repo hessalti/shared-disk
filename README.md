@@ -13,6 +13,6 @@
 usermod -u 555 hess
 groupmod -g 555 hess
 chown -R hess:hess /home/hess
-# Edit "/etc/idmapd.conf" add line "Domain = localdomain"
+#Edit "/etc/idmapd.conf" add line "Domain = localdomain"
 nfsidmap -c
 ```
