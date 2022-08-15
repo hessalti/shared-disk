@@ -17,3 +17,8 @@ chown -R hess:hess /home/hess
 #Edit "/etc/idmapd.conf" add line "Domain = localdomain"
 nfsidmap -c
 ```
+
+### Zookeeper setup
+```
+#Edit $ALTIBASE_HOME/ZookeeperServer/conf/zoo.cfg add line "server.1=192.168.1.108:2888:3888"
+```
