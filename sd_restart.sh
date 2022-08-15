@@ -15,14 +15,20 @@ if [ "$MYID" != "1" ] && [ "$MYID" != "2" ]; then
     exit 1
 fi
 
-CONNECT_RESULT=$( ${ALTIBASE_HOME}/ZookeeperServer/bin/zkCli.sh -server 192.168.1.106:2181 quit | grep 'Session establishment complete' )
+CONNECT_RESULT=$( ${ALTIBASE_HOME}/ZookeeperServer/bin/zkCli.sh -server 192.168.1.108:2181 quit | grep 'Session establishment complete' )
 
 if [ "x$CONNECT_RESULT" = "x" ]; then
-    #virtual IP delete $VIP
+    echo virtual IP delete
 else
     server start
+    RESTART_RESULT=$(isql -s 127.0.0.1 -u sys -p manager << 'EOF'
+        ALTER DATABASE SHARD FAILBACK;
+EOF
+)
 
 fi
 
+echo "RESTART_RESULT :" $RESTART_RESULT
 echo "CONNECT_RESULT :" $CONNECT_RESULT
 exit 0
+
