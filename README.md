@@ -26,4 +26,7 @@ nfsidmap -c
 #execute following command in zk server (192.168.1.108)
 echo 1 > /tmp/zookeeper/myid
 ${ALTIBASE_HOME}/ZookeeperServer/bin/zkServer.sh --config ${ALTIBASE_HOME}/ZookeeperServer/conf start
+
+#zk client test
+${ALTIBASE_HOME}/ZookeeperServer/bin/zkCli.sh -server 192.168.1.108:2181
 ```
