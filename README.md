@@ -20,6 +20,10 @@ nfsidmap -c
 
 ### Zookeeper setup
 ```
+#setup zoo.cfg in all zk server and clients
 #Edit $ALTIBASE_HOME/ZookeeperServer/conf/zoo.cfg add line "server.1=192.168.1.108:2888:3888"
+
+#execute following command in zk server (192.168.1.108)
 echo 1 > /tmp/zookeeper/myid
+${ALTIBASE_HOME}/ZookeeperServer/bin/zkServer.sh --config ${ALTIBASE_HOME}/ZookeeperServer/conf start
 ```
