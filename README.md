@@ -21,4 +21,5 @@ nfsidmap -c
 ### Zookeeper setup
 ```
 #Edit $ALTIBASE_HOME/ZookeeperServer/conf/zoo.cfg add line "server.1=192.168.1.108:2888:3888"
+echo 1 > /tmp/zookeeper/myid
 ```
