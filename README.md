@@ -2,12 +2,14 @@
 - 192.168.1.108 : NFS server, Zookeeper server
 - 192.168.1.105 : SHARD-1, NFS client, Zookeeper client
 - 192.168.1.106 : SHARD-2, NFS client, Zookeeper client
-- user-name(user-id) : hess(555)
-- group-name(group-id) : hess(555)
-- home directory : /home1/hess
+- Setup all servers(nfs server and clients) with same user name, user id, group name, group id and home directory path.
+  - user-name(user-id) : hess(555)
+  - group-name(group-id) : hess(555)
+- $ALTIBASE_HOME path of SHARD-1 and SHARD-2 should same in both servers.
+  - SHARD-1 $ALTIBASE_HOME : /home1/hess/altibase_home_1
+  - SHARD-2 $ALTIBASE_HOME : /home1/hess/altibase_home_2
 
 ### nfs setup
-- Setup all servers(nfs server and clients) with same user name, user id, group name, group id and home directory path.
 - Execute following commands in all servers(nfs server and clients).
 ```
 #It is just as an example.
