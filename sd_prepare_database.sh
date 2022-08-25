@@ -19,6 +19,7 @@ isql -silent -s 127.0.0.1 -u ${SYS_USER_ID} -p ${SYS_USER_PASSWD} -sysdba -nopro
 EOF
 
 server start
+sleep 3
 
 # Prepare sharding
 isql -silent -s 127.0.0.1 -u ${SYS_USER_ID} -p ${SYS_USER_PASSWD} -f ${ALTIBASE_HOME}/packages/dbms_shard.sql
