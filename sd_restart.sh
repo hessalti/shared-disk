@@ -1,34 +1,49 @@
-(자동 Restart) 상황
-server start
-(server start 성공한 경우) alter database shard failback;
-(server start 성공한 경우) virtual IP add $VIP
-(server start 실패한 경우) virtual IP delete $VIP
-(자동 Failover) 상황
-virtual IP delete $VIP
-
-
-########## working on 192.168.1.105:~
 #!/usr/bin/env bash
 
-if [ "$MYID" != "1" ] && [ "$MYID" != "2" ]; then
-    echo "Error: MYID environment variable is not set."
+if [ "$MY_ID" != "1" ] && [ "$MY_ID" != "2" ]; then
+    echo "########## Error: MY_ID environment variable is not set."
+    echo "########## Execute this command first : source ~/sd_mgmt/sd_set.env [1|2]"
     exit 1
 fi
 
-CONNECT_RESULT=$( ${ALTIBASE_HOME}/ZookeeperServer/bin/zkCli.sh -server 192.168.1.108:2181 quit | grep 'Session establishment complete' )
+CONNECT_RESULT=$( ${ALTIBASE_HOME}/ZookeeperServer/bin/zkCli.sh -server ${ZK_SERVER_1}:2181 quit | grep 'Session establishment complete' )
+
+#If you have multiple zk servers then check other zk servers
+#if [ "x$CONNECT_RESULT" = "x" ]; then
+#    CONNECT_RESULT=$( ${ALTIBASE_HOME}/ZookeeperServer/bin/zkCli.sh -server ${ZK_SERVER_2}:2181 quit | grep 'Session establishment complete' )
+#
+#    if [ "x$CONNECT_RESULT" = "x" ]; then
+#        CONNECT_RESULT=$( ${ALTIBASE_HOME}/ZookeeperServer/bin/zkCli.sh -server ${ZK_SERVER_3}:2181 quit | grep 'Session establishment complete' )
+#    fi
+#fi
 
 if [ "x$CONNECT_RESULT" = "x" ]; then
-    echo virtual IP delete
-else
-    server start
-    RESTART_RESULT=$(isql -s 127.0.0.1 -u sys -p manager << 'EOF'
-        ALTER DATABASE SHARD FAILBACK;
-EOF
-)
-
+    echo "########## ZK connection failure"
+    echo "########## Delete virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
+    ~/sd_mgmt/vip_change.sh down
+    exit 0
 fi
 
-echo "RESTART_RESULT :" $RESTART_RESULT
-echo "CONNECT_RESULT :" $CONNECT_RESULT
-exit 0
+echo "########## Restart Altibase server : \$MY_ID = $MY_ID"
+echo "########## Add virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
+~/sd_mgmt/vip_change.sh up
+server start
+sleep 3
+FAILBACK_RESULT=$(isql -s 127.0.0.1 -u sys -p manager << 'EOF'
+    ALTER DATABASE SHARD FAILBACK;
+EOF
+)
+echo "########## FAILBACK_RESULT :" $FAILBACK_RESULT
 
+FAILBACK_OK=$( echo $FAILBACK_RESULT | grep 'Alter success' )
+echo "########## FAILBACK_OK :" $FAILBACK_OK
+
+if [ "x$FAILBACK_OK" = "x" ]; then
+    echo "########## FAILBACK failure... server kill"
+    server kill
+
+    echo "########## Delete virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
+    ~/sd_mgmt/vip_change.sh down
+fi
+
+exit 0
