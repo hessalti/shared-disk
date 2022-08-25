@@ -1,7 +1,8 @@
-### Servers
+### Machines
 - 192.168.1.108 : NFS server, Zookeeper server
 - 192.168.1.105 : SHARD-1, NFS client, Zookeeper client
 - 192.168.1.106 : SHARD-2, NFS client, Zookeeper client
+- 192.168.1.95 : application client
 - Setup all servers(nfs server and clients) with same user name, user id, group name, group id and home directory path.
   - user-name(user-id) : hess(555)
   - group-name(group-id) : hess(555)
