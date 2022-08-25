@@ -6,6 +6,10 @@ if [ "$MY_ID" != "1" ] && [ "$MY_ID" != "2" ]; then
     exit 1
 fi
 
+echo "########## Restart Altibase server : \$MY_ID = $MY_ID"
+echo "########## Add virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
+~/sd_mgmt/vip_change.sh up
+
 isql -silent -s 127.0.0.1 -u ${SYS_USER_ID} -p ${SYS_USER_PASSWD} -sysdba -noprompt << EOF
     startup process;
     CREATE DATABASE mydb INITSIZE=${DB_INITSIZE}M ${DB_ARCH_MODE} CHARACTER SET ${DB_CHARSET} NATIONAL CHARACTER SET ${DB_NATIONAL_CHARSET};
