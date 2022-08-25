@@ -9,6 +9,7 @@ fi
 echo "########## Restart Altibase server : \$MY_ID = $MY_ID"
 echo "########## Add virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
 ~/sd_mgmt/vip_change.sh up
+sleep 20
 
 isql -silent -s 127.0.0.1 -u ${SYS_USER_ID} -p ${SYS_USER_PASSWD} -sysdba -noprompt << EOF
     startup process;
@@ -18,8 +19,6 @@ isql -silent -s 127.0.0.1 -u ${SYS_USER_ID} -p ${SYS_USER_PASSWD} -sysdba -nopro
 EOF
 
 server start
-
-sleep 3
 
 # Prepare sharding
 isql -silent -s 127.0.0.1 -u ${SYS_USER_ID} -p ${SYS_USER_PASSWD} -f ${ALTIBASE_HOME}/packages/dbms_shard.sql
