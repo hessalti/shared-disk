@@ -33,3 +33,9 @@ ${ALTIBASE_HOME}/ZookeeperServer/bin/zkServer.sh --config ${ALTIBASE_HOME}/Zooke
 #zk client test
 ${ALTIBASE_HOME}/ZookeeperServer/bin/zkCli.sh -server 192.168.1.108:2181
 ```
+
+#SHARD-1, SHARD-2 setup
+```
+#move to user directory
+git clone https://github.com/hessalti/shared-disk.git sd_mgmt
+```
