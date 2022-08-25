@@ -30,8 +30,8 @@ echo "########## Add virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTU
 server start
 sleep 3
 FAILBACK_RESULT=$(isql -s 127.0.0.1 -u sys -p manager << 'EOF'
-    ALTER DATABASE SHARD FAILBACK;
     ALTER DATABASE SHARD JOIN;
+    ALTER DATABASE SHARD FAILBACK;
 EOF
 )
 echo "########## FAILBACK_RESULT :" $FAILBACK_RESULT
