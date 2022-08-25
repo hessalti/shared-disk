@@ -27,8 +27,9 @@ fi
 echo "########## Restart Altibase server : \$MY_ID = $MY_ID"
 echo "########## Add virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
 ~/sd_mgmt/vip_change.sh up
-server start
 sleep 20
+server start
+sleep 3
 FAILBACK_RESULT=$(isql -s 127.0.0.1 -u sys -p manager << 'EOF'
     ALTER DATABASE SHARD JOIN;
     ALTER DATABASE SHARD FAILBACK;
