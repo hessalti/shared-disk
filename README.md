@@ -38,6 +38,8 @@ ${ALTIBASE_HOME}/ZookeeperServer/bin/zkCli.sh -server 192.168.1.108:2181
 ```
 #move to user directory
 git clone https://github.com/hessalti/shared-disk.git sd_mgmt
+cd sd_mgmt
+chmod +x *.sh
 
 #environment setting
 source ~/sd_mgmt/sd_set.env 1
