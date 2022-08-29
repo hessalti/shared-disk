@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 
+if [ "x$SD_MGMT" = "x" ]; then
+    echo "Error: SD_MGMT environment variable is not set."
+    echo "Find sd_set.env and execute this command first : source sd_set.env [1|2]"
+    exit 1
+fi
+
 if [ "$MY_ID" != "1" ] && [ "$MY_ID" != "2" ]; then
     echo "########## Error: MY_ID environment variable is not set."
-    echo "########## Execute this command first : source ~/sd_mgmt/sd_set.env [1|2]"
+    echo "########## Execute this command first : source ${SD_MGMT}/sd_set.env [1|2]"
     exit 1
 fi
 
@@ -20,17 +26,17 @@ CONNECT_RESULT=$( ${ALTIBASE_HOME}/ZookeeperServer/bin/zkCli.sh -server ${ZK_SER
 if [ "x$CONNECT_RESULT" = "x" ]; then
     echo "########## ZK connection failure"
     echo "########## Delete virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
-    ~/sd_mgmt/vip_change.sh down
+    ${SD_MGMT}/vip_change.sh down
     exit 0
 fi
 
 echo "########## Restart Altibase server : \$MY_ID = $MY_ID"
 echo "########## Add virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
-~/sd_mgmt/vip_change.sh up
-sleep 20
+${SD_MGMT}/vip_change.sh up
+sleep 10
 server start
 sleep 3
-FAILBACK_RESULT=$(isql -s 127.0.0.1 -u sys -p manager << 'EOF'
+FAILBACK_RESULT=$(isql -s 127.0.0.1 -u ${SYS_USER_ID} -p ${SYS_USER_PASSWD} -silent -noprompt << 'EOF'
     ALTER DATABASE SHARD JOIN;
     ALTER DATABASE SHARD FAILBACK;
 EOF
@@ -45,7 +51,7 @@ if [ "x$FAILBACK_OK" = "x" ]; then
     server kill
 
     echo "########## Delete virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
-    ~/sd_mgmt/vip_change.sh down
+    ${SD_MGMT}/vip_change.sh down
 fi
 
 exit 0
