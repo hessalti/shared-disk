@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 if [ "x$SD_MGMT" = "x" ]; then
     echo "Error: SD_MGMT environment variable is not set."
     echo "Find sd_set.env and execute this command first : source sd_set.env [1|2]"
