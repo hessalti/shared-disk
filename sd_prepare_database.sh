@@ -12,10 +12,9 @@ if [ "$MY_ID" != "1" ] && [ "$MY_ID" != "2" ]; then
     exit 1
 fi
 
+cp ${ALTIBASE_HOME}/conf/altibase.properties.shard ${ALTIBASE_HOME}/conf/altibase.properties
+
 echo "########## Restart Altibase server : \$MY_ID = $MY_ID"
-echo "########## Add virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
-${SD_MGMT}/vip_change.sh up
-sleep 10
 
 isql -silent -s 127.0.0.1 -u ${SYS_USER_ID} -p ${SYS_USER_PASSWD} -sysdba -noprompt << EOF
     startup process;
@@ -47,6 +46,11 @@ EOF
 isql -silent -s 127.0.0.1 -u ${SYS_USER_ID} -p ${SYS_USER_PASSWD} -f ${ALTIBASE_HOME}/packages/utl_shard_online_rebuild.sql
 isql -silent -s 127.0.0.1 -u ${SYS_USER_ID} -p ${SYS_USER_PASSWD} -f ${ALTIBASE_HOME}/packages/utl_shard_online_rebuild.plb
 
+echo "########## Add virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
+${SD_MGMT}/vip_change.sh up
+sleep 10
+
+echo "########## ALTER DATABASE SHARD ADD"
 isql -silent -s 127.0.0.1 -u ${SYS_USER_ID} -p ${SYS_USER_PASSWD} -noprompt << EOF
     ALTER DATABASE SHARD ADD;
 EOF
