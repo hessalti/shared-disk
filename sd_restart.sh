@@ -27,15 +27,22 @@ if [ "x$CONNECT_RESULT" = "x" ]; then
     echo "########## ZK connection failure"
     echo "########## Delete virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
     ${SD_MGMT}/vip_change.sh down
-    exit 0
+    exit 1
 fi
 
 echo "########## Restart Altibase server : \$MY_ID = $MY_ID"
+SERVER_START_RESULT=$( server start | grep 'STARTUP Process SUCCESS' )
+
+if [ "x$SERVER_START_RESULT" = "x" ]; then
+    echo "########## server start failure"
+    echo "########## Delete virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
+    ${SD_MGMT}/vip_change.sh down
+    exit 1
+fi
+
 echo "########## Add virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
 ${SD_MGMT}/vip_change.sh up
 sleep 10
-server start
-sleep 3
 FAILBACK_RESULT=$(isql -s 127.0.0.1 -u ${SYS_USER_ID} -p ${SYS_USER_PASSWD} -silent -noprompt << 'EOF'
     ALTER DATABASE SHARD JOIN;
     ALTER DATABASE SHARD FAILBACK;
@@ -52,6 +59,7 @@ if [ "x$FAILBACK_OK" = "x" ]; then
 
     echo "########## Delete virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
     ${SD_MGMT}/vip_change.sh down
+    exit 1
 fi
 
 exit 0
