@@ -20,9 +20,13 @@ else
 fi
 
 echo "########## server start : \$MY_ID = $MY_ID"
-SERVER_START_RESULT=$( server start | grep 'STARTUP Process SUCCESS' )
+SERVER_START_RESULT=$( server start )
+echo "########## SERVER_START_RESULT :" $SERVER_START_RESULT
 
-if [ "x$SERVER_START_RESULT" = "x" ]; then
+SERVER_START_OK=$( echo $SERVER_START_RESULT | grep 'STARTUP Process SUCCESS' )
+echo "########## SERVER_START_OK :" $SERVER_START_OK
+
+if [ "x$SERVER_START_OK" = "x" ]; then
     echo "########## server start failure"
     echo "########## Delete virtual IP : \$MY_ID = $MY_ID , \$MY_VIRTUAL_IP = $MY_VIRTUAL_IP"
     ${SD_MGMT}/vip_change.sh down
