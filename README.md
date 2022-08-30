@@ -36,6 +36,7 @@ ${ALTIBASE_HOME}/ZookeeperServer/bin/zkCli.sh -server 192.168.1.108:2181
 
 ### SHARD-1 setup
 ```
+ssh 192.168.1.105
 #move to user directory
 git clone https://github.com/hessalti/shared-disk.git sd_mgmt
 cd sd_mgmt
@@ -43,6 +44,21 @@ chmod +x *.sh
 
 #environment setting
 source ~/sd_mgmt/sd_set.env 1
+
+#create db & add shard node
+~/sd_mgmt/sd_prepare_database.sh
+```
+
+### SHARD-2 setup
+```
+ssh 192.168.1.106
+#move to user directory
+git clone https://github.com/hessalti/shared-disk.git sd_mgmt
+cd sd_mgmt
+chmod +x *.sh
+
+#environment setting
+source ~/sd_mgmt/sd_set.env 2
 
 #create db & add shard node
 ~/sd_mgmt/sd_prepare_database.sh
