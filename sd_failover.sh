@@ -37,7 +37,7 @@ echo "########## server start success : \$SHARED_DISK_MY_ID = $SHARED_DISK_MY_ID
 echo "########## Add virtual IP : \$SHARED_DISK_MY_ID = $SHARED_DISK_MY_ID , \$SHARED_DISK_MY_VIRTUAL_IP = $SHARED_DISK_MY_VIRTUAL_IP"
 ${SHARED_DISK_SD_MGMT}/vip_change.sh up
 sleep 4
-FAILBACK_RESULT=$(isql -s 127.0.0.1 -u ${SHARED_DISK_SYS_USER_ID} -p ${SHARED_DISK_SYS_USER_PASSWD} -silent -noprompt << 'EOF'
+FAILBACK_RESULT=$(isql -s 127.0.0.1 -u ${SYS_USER_ID} -p ${SYS_USER_PASSWD} -silent -noprompt << 'EOF'
     ALTER DATABASE SHARD JOIN;
     ALTER DATABASE SHARD FAILBACK;
 EOF
