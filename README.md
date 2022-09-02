@@ -34,31 +34,24 @@ ${ALTIBASE_HOME}/ZookeeperServer/bin/zkServer.sh --config ${ALTIBASE_HOME}/Zooke
 ${ALTIBASE_HOME}/ZookeeperServer/bin/zkCli.sh -server 192.168.1.108:2181
 ```
 
-### SHARD-1 setup
+### SHARD-1 and SHARD-2 setup
 ```
-ssh 192.168.1.105
+#connect
+ssh 192.168.1.105 #SHARD-1 
+ssh 192.168.1.106 #SHARD-2 
+
 #move to user directory
 git clone https://github.com/hessalti/shared-disk.git sd_mgmt
 cd sd_mgmt
 chmod +x *.sh
 
-#environment setting
-source ~/sd_mgmt/sd_set.env 1
-
-#create db & add shard node
-~/sd_mgmt/sd_prepare_database.sh
-```
-
-### SHARD-2 setup
-```
-ssh 192.168.1.106
-#move to user directory
-git clone https://github.com/hessalti/shared-disk.git sd_mgmt
-cd sd_mgmt
-chmod +x *.sh
+#preparation for dynamic virtual change
+#execute "sudo visudo" command in linux terminal
+#append "hess ALL = NOPASSWD: /sbin/ifconfig" as a last line of the editing file
 
 #environment setting
-source ~/sd_mgmt/sd_set.env 2
+source ~/sd_mgmt/sd_set.env 1 #SHARD-1
+source ~/sd_mgmt/sd_set.env 1 #SHARD-2
 
 #create db & add shard node
 ~/sd_mgmt/sd_prepare_database.sh
