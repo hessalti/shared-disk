@@ -50,8 +50,9 @@ chmod +x *.sh
 #append "hess ALL = NOPASSWD: /sbin/ifconfig" as a last line of the editing file
 
 #environment setting
+#change environment variables setting in sd_set.env according to your environment
 source ~/sd_mgmt/sd_set.env 1 #SHARD-1
-source ~/sd_mgmt/sd_set.env 1 #SHARD-2
+source ~/sd_mgmt/sd_set.env 2 #SHARD-2
 
 #create db & add shard node
 ~/sd_mgmt/sd_prepare_database.sh
